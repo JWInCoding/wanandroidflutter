@@ -1,7 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
-/// 图片工具类 - iOS风格实现
+/// 图片工具类 - Material风格实现
 /// 提供网络图片加载、缓存和预处理功能
 class ImageUtil {
   // MARK: - 私有属性
@@ -10,7 +10,7 @@ class ImageUtil {
   ImageUtil._();
 
   /// 默认占位图背景颜色
-  static final Color _defaultPlaceholderColor = CupertinoColors.systemGrey6;
+  static final Color _defaultPlaceholderColor = Colors.grey[200]!;
 
   /// 默认图片淡入动画时长
   static const Duration _defaultFadeInDuration = Duration(milliseconds: 300);
@@ -87,17 +87,15 @@ class ImageUtil {
 
   // MARK: - 私有辅助方法
 
-  /// 创建加载中Widget - iOS风格
+  /// 创建加载中Widget - Material风格
   static Widget _buildPlaceholderWidget(Color? backgroundColor) {
     return Container(
       color: backgroundColor ?? _defaultPlaceholderColor,
-      child: const Center(
-        child: CupertinoActivityIndicator(), // 使用iOS风格的加载指示器
-      ),
+      child: const Center(child: CircularProgressIndicator()),
     );
   }
 
-  /// 创建错误Widget - iOS风格
+  /// 创建错误Widget - Material风格
   static Widget _buildErrorWidget(
     Widget? customWidget,
     Color? backgroundColor,
@@ -105,11 +103,8 @@ class ImageUtil {
     return customWidget ??
         Container(
           color: backgroundColor ?? _defaultPlaceholderColor,
-          child: Center(
-            child: Icon(
-              CupertinoIcons.exclamationmark_triangle, // 使用iOS风格的图标
-              color: CupertinoColors.systemRed,
-            ),
+          child: const Center(
+            child: Icon(Icons.error_outline, color: Colors.red),
           ),
         );
   }

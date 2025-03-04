@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:wanandroidflutter/utils/error_handle.dart';
 
-void main() {
-  runApp(const MyApp());
+Future<void> main() async {
+  handleError(() async {
+    runApp(const MyApp());
+  });
 }
 
 class MyApp extends StatelessWidget {
