@@ -6,6 +6,7 @@ import 'package:wanandroidflutter/network/bean/AppResponse.dart';
 import 'package:wanandroidflutter/network/bean/article_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
 import 'package:wanandroidflutter/network/request_util.dart';
+import 'package:wanandroidflutter/user.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
 
 class HomeController extends GetxController {
@@ -20,6 +21,9 @@ class HomeController extends GetxController {
     controlFinishLoad: true,
   );
 
+  // 监听用户登录状态
+  late Worker _loginStatusWorker;
+
   //加载状态
   final isLoading = true.obs;
   final hasError = false.obs;
@@ -27,12 +31,17 @@ class HomeController extends GetxController {
   @override
   void onInit() {
     super.onInit();
+
+    _loginStatusWorker = ever(Get.find<UserController>().isLoggedIn, (_) {
+      refreshData();
+    });
     // 初始化时加载数据
     refreshData();
   }
 
   @override
   void onClose() {
+    _loginStatusWorker.dispose();
     refreshController.dispose();
     super.onClose();
   }
@@ -41,7 +50,6 @@ class HomeController extends GetxController {
   Future<void> refreshData() async {
     isLoading.value = true;
     hasError.value = false;
-
     try {
       bool success = await _refreshRequest();
       if (!success) {
@@ -60,12 +68,19 @@ class HomeController extends GetxController {
   Future<void> loadMoreData() async {
     try {
       _pageIndex.value++;
-      await _loadRequest();
+      bool hasMoreData = await _loadRequest();
+
+      if (hasMoreData) {
+        Wanlog.i("有更多数据，完成加载");
+        refreshController.finishLoad(); // 正常完成
+      } else {
+        Wanlog.i("无更多数据，设置 noMore 状态");
+        refreshController.finishLoad(IndicatorResult.noMore); // 没有更多数据
+      }
     } catch (e) {
       Wanlog.e("加载更多失败:$e");
       _pageIndex.value--; // 加载失败，恢复页码
-    } finally {
-      refreshController.finishLoad();
+      refreshController.finishLoad(IndicatorResult.fail); // 加载失败
     }
   }
 
@@ -107,14 +122,22 @@ class HomeController extends GetxController {
   }
 
   // 加载更多文章列表
-  Future<void> _loadRequest() async {
+  Future<bool> _loadRequest() async {
     AppResponse<ArticleDataEntity> res = await HttpGo.instance
         .get<ArticleDataEntity>(
           "${Api.homePageArticle}${_pageIndex.value}/json",
         );
     if (res.isSuccessful) {
-      articleList.addAll(res.data?.datas ?? []);
+      List<ArticleItemEntity> newItems = res.data?.datas ?? [];
+      if (newItems.isNotEmpty) {
+        articleList.addAll(newItems);
+        articleList.refresh(); // 重要: 触发 UI 更新
+        return true; // 返回加载状态
+      } else {
+        return false; // 没有更多数据
+      }
     }
+    return false; // 请求失败
   }
 
   // 收藏/取消

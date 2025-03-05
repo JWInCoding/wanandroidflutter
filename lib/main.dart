@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:mmkv/mmkv.dart';
+import 'package:wanandroidflutter/constants/constans.dart';
+import 'package:wanandroidflutter/network/request_util.dart';
 import 'package:wanandroidflutter/pages/main_page.dart';
 import 'package:wanandroidflutter/user.dart';
 import 'package:wanandroidflutter/utils/error_handle.dart';
@@ -9,6 +11,7 @@ import 'package:wanandroidflutter/utils/error_handle.dart';
 Future<void> main() async {
   handleError(() async {
     WidgetsFlutterBinding.ensureInitialized();
+    configDio(baseUrl: Constant.baseUrl);
 
     // 初始化 mmkv
     await MMKV.initialize();

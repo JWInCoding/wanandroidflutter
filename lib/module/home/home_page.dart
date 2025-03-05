@@ -5,6 +5,8 @@ import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
 import 'package:wanandroidflutter/module/home/home_controller.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
+import 'package:wanandroidflutter/pages/detail_page.dart';
+import 'package:wanandroidflutter/pages/widget/article_item_layout.dart';
 import 'package:wanandroidflutter/utils/image_util.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
 
@@ -48,44 +50,57 @@ class _HomePageState extends State<HomePage>
       backgroundColor: Colors.white70,
       body: Obx(() {
         if (controller.isLoading.value) {
-          return const Center(
-            widthFactor: 1,
-            heightFactor: 1,
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         }
         if (controller.hasError.value) {
           return RetryWidget(onTapRetry: controller.refreshData);
         }
-        return EasyRefresh.builder(
+
+        // 检查是否有Banner数据
+        final hasBanner =
+            controller.bannerData.value != null &&
+            controller.bannerData.value!.isNotEmpty;
+
+        return EasyRefresh(
           controller: controller.refreshController,
           onRefresh: controller.refreshData,
           onLoad: controller.loadMoreData,
-          childBuilder: (content, physics) {
-            return CustomScrollView(
-              physics: physics,
-              slivers: [
-                // banner
-                if (controller.bannerData.value != null &&
-                    controller.bannerData.value!.isNotEmpty)
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 16, 0, 0),
-                      child: CarouselSlider(
-                        items: _bannerList(controller.bannerData.value!),
-                        options: CarouselOptions(
-                          enableInfiniteScroll: true,
-                          autoPlay: true,
-                          aspectRatio: 2.0,
-                          enlargeCenterPage: true,
-                          enlargeStrategy: CenterPageEnlargeStrategy.height,
-                        ),
-                      ),
+          child: ListView.builder(
+            // 列表总长度 = 文章数量 + (有Banner时为1，无Banner时为0)
+            itemCount: controller.articleList.length + (hasBanner ? 1 : 0),
+            itemBuilder: (context, index) {
+              // 如果有Banner且是第一个位置，显示Banner
+              if (hasBanner && index == 0) {
+                return Padding(
+                  padding: const EdgeInsets.fromLTRB(0, 16, 0, 16),
+                  child: CarouselSlider(
+                    items: _bannerList(controller.bannerData.value!),
+                    options: CarouselOptions(
+                      enableInfiniteScroll: true,
+                      autoPlay: true,
+                      aspectRatio: 2.0,
+                      enlargeCenterPage: true,
+                      enlargeStrategy: CenterPageEnlargeStrategy.height,
                     ),
                   ),
-              ],
-            );
-          },
+                );
+              }
+
+              // 计算文章列表中的实际索引
+              final articleIndex = hasBanner ? index - 1 : index;
+              final article = controller.articleList[articleIndex];
+
+              return GestureDetector(
+                onTap: () {
+                  Get.to(() => DetailPage(article.link, article.title));
+                },
+                child: ArticleItemLayout(
+                  itemEntity: article,
+                  onCollectTap: () => controller.toggleCollect(article),
+                ),
+              );
+            },
+          ),
         );
       }),
     );

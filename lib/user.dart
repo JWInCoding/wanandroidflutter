@@ -6,16 +6,16 @@ import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
 import 'package:wanandroidflutter/network/request_util.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
 
-typedef LoginStatusChangeCallback = void Function();
-
 class UserController extends GetxController {
   static const String _userInfoKey = "userInfo";
   // 使用 Rx 变量代替普通变量
   final Rx<UserInfoEntity?> _userInfo = Rx<UserInfoEntity?>(null);
 
+  final RxBool _isLoggedIn = false.obs;
+
   // 提供 getter 方法
   UserInfoEntity? get userInfo => _userInfo.value;
-  bool get isLoggedIn => _userInfo.value != null;
+  RxBool get isLoggedIn => _isLoggedIn;
   String get userName => _userInfo.value?.username ?? "";
   int get userCoinCount => _userInfo.value?.coinCount ?? 0;
 
@@ -33,11 +33,13 @@ class UserController extends GetxController {
       MMKV mmkv = MMKV.defaultMMKV();
       String? infoContent = mmkv.decodeString(_userInfoKey);
       if (infoContent == null || infoContent.isEmpty) {
+        _isLoggedIn.value = false;
         return;
       }
       _userInfo.value = UserInfoEntity.fromJson(
         json.decoder.convert(infoContent),
       );
+      _isLoggedIn.value = true;
     } catch (e) {
       Wanlog.e("获取本地用户信息失败 $e");
     }
@@ -45,6 +47,7 @@ class UserController extends GetxController {
 
   loginSuccess(UserInfoEntity userInfoEntity) {
     _userInfo.value = userInfoEntity;
+    _isLoggedIn.value = true;
     try {
       MMKV mmkv = MMKV.defaultMMKV();
       String infoContent = userInfoEntity.toString();
@@ -52,10 +55,12 @@ class UserController extends GetxController {
     } catch (e) {
       Wanlog.e("保存用户信息失败 $e");
     }
+    update();
   }
 
   logout() {
     _userInfo.value = null;
+    _isLoggedIn.value = false;
     HttpGo.instance.cookieJar?.deleteAll();
     try {
       MMKV mmkv = MMKV.defaultMMKV();

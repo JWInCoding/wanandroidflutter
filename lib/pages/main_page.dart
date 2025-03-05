@@ -16,8 +16,6 @@ class MainPage extends StatefulWidget {
 class _MainPageState extends State<MainPage> {
   int _selectedItemIndex = 0;
 
-  String _currentTitle = "首页";
-
   final PageController _pageController = PageController(initialPage: 0);
 
   final List<String> _titles = ["首页", "项目", "广场", "我的"];
@@ -72,7 +70,6 @@ class _MainPageState extends State<MainPage> {
   void _onPageChanged(int index) {
     setState(() {
       _selectedItemIndex = index;
-      _currentTitle = _titles[index];
     });
   }
 
