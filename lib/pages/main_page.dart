@@ -3,7 +3,6 @@ import 'package:wanandroidflutter/pages/tab_page/home_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/mine_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/plaza_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/project_page.dart';
-import 'package:wanandroidflutter/utils/log_util.dart';
 
 class MainPage extends StatefulWidget {
   final String title;
@@ -39,26 +38,16 @@ class _MainPageState extends State<MainPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text(_currentTitle, style: const TextStyle(color: Colors.white)),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {
-              Wanlog.i("跳转搜索");
-            },
-            icon: const Icon(Icons.search, color: Colors.white),
-            tooltip: '搜索',
-          ),
-        ],
-      ),
       bottomNavigationBar: BottomNavigationBar(
         items: _generateBottomNavList(),
         iconSize: 24,
+        selectedFontSize: 14,
+        unselectedFontSize: 14,
         selectedItemColor: Theme.of(context).primaryColor,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedItemIndex,
         onTap: _onNavItemTapped,
+        type: BottomNavigationBarType.fixed,
       ),
       body: PageView.builder(
         itemBuilder: (context, index) {
