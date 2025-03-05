@@ -103,7 +103,7 @@ class HttpGo {
       Map<String, dynamic> map = json.decode(response.data.toString());
       result = AppResponse.fromJson(map);
       if (result.errorCode == Constant.invalidateToken) {
-        User().logout();
+        UserController.to.logout();
       }
     } on DioException catch (e) {
       Wanlog.e("请求错误 -- $e");

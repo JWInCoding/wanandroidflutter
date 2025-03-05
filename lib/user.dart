@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
 import 'package:wanandroidflutter/network/request_util.dart';
@@ -8,31 +8,24 @@ import 'package:wanandroidflutter/utils/log_util.dart';
 
 typedef LoginStatusChangeCallback = void Function();
 
-class User extends ChangeNotifier {
+class UserController extends GetxController {
   static const String _userInfoKey = "userInfo";
+  // 使用 Rx 变量代替普通变量
+  final Rx<UserInfoEntity?> _userInfo = Rx<UserInfoEntity?>(null);
 
-  User._internal();
+  // 提供 getter 方法
+  UserInfoEntity? get userInfo => _userInfo.value;
+  bool get isLoggedIn => _userInfo.value != null;
+  String get userName => _userInfo.value?.username ?? "";
+  int get userCoinCount => _userInfo.value?.coinCount ?? 0;
 
-  static final User _singleton = User._internal();
+  // 实现单例模式 (GetX 已内置支持单例)
+  static UserController get to => Get.find<UserController>();
 
-  factory User() => _singleton;
-
-  UserInfoEntity? _userInfoEntity;
-
-  bool isLoggedIn() => _userInfoEntity != null;
-
-  String get userName => _userInfoEntity!.username;
-
-  int get userCoinCount => _userInfoEntity!.coinCount;
-
-  final List<LoginStatusChangeCallback> _list = [];
-
-  on(LoginStatusChangeCallback loginStatusChange) {
-    _list.add(loginStatusChange);
-  }
-
-  off(LoginStatusChangeCallback loginStatusChange) {
-    _list.remove(loginStatusChange);
+  @override
+  void onInit() {
+    super.onInit();
+    loadFromLocal();
   }
 
   loadFromLocal() {
@@ -42,7 +35,7 @@ class User extends ChangeNotifier {
       if (infoContent == null || infoContent.isEmpty) {
         return;
       }
-      _userInfoEntity = UserInfoEntity.fromJson(
+      _userInfo.value = UserInfoEntity.fromJson(
         json.decoder.convert(infoContent),
       );
     } catch (e) {
@@ -51,10 +44,10 @@ class User extends ChangeNotifier {
   }
 
   loginSuccess(UserInfoEntity userInfoEntity) {
-    _userInfoEntity = userInfoEntity;
+    _userInfo.value = userInfoEntity;
     try {
       MMKV mmkv = MMKV.defaultMMKV();
-      String infoContent = _userInfoEntity.toString();
+      String infoContent = userInfoEntity.toString();
       mmkv.encodeString(_userInfoKey, infoContent);
     } catch (e) {
       Wanlog.e("保存用户信息失败 $e");
@@ -62,7 +55,7 @@ class User extends ChangeNotifier {
   }
 
   logout() {
-    _userInfoEntity = null;
+    _userInfo.value = null;
     HttpGo.instance.cookieJar?.deleteAll();
     try {
       MMKV mmkv = MMKV.defaultMMKV();
@@ -70,10 +63,6 @@ class User extends ChangeNotifier {
     } catch (e) {
       Wanlog.e("退出登录删除用户信息失败 $e");
     }
-
-    notifyListeners();
-    for (var callback in _list) {
-      callback();
-    }
+    update(); // 通知所有使用GetBuilder的UI更新
   }
 }

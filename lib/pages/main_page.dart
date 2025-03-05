@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:wanandroidflutter/pages/tab_page/home_page.dart';
+import 'package:wanandroidflutter/module/home/home_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/mine_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/plaza_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/project_page.dart';
