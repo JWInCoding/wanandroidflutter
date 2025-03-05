@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:wanandroidflutter/generated/json/banner_entity_g.dart';
+import 'package:wanandroidflutter/generated/json/banner_entity.g.dart';
 import 'package:wanandroidflutter/generated/json/base/json_field.dart';
 
 @JsonSerializable()

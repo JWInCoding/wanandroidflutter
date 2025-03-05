@@ -1,4 +1,8 @@
+import 'package:wanandroidflutter/network/bean/article_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
+import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
+import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
+import 'package:wanandroidflutter/network/bean/user_tool_entity.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
 
 JsonConvert jsonConvert = JsonConvert();
@@ -11,7 +15,12 @@ class JsonConvert {
   static ConverExceptionHandler? onError;
 
   static Map<String, JsonConvertFunction> get convertFuncMap => {
+    (ArticleDataEntity).toString(): ArticleDataEntity.fromJson,
+    (ArticleItemEntity).toString(): ArticleItemEntity.fromJson,
     (BannerEntity).toString(): BannerEntity.fromJson,
+    (HotKeywordEntity).toString(): HotKeywordEntity.fromJson,
+    (UserInfoEntity).toString(): UserInfoEntity.fromJson,
+    (UserToolEntity).toString(): UserToolEntity.fromJson,
   };
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
@@ -114,10 +123,50 @@ class JsonConvert {
   }
 
   static M? _getListChildType<M>(List<Map<String, dynamic>> data) {
+    if (<ArticleDataEntity>[] is M) {
+      return data
+              .map<ArticleDataEntity>(
+                (Map<String, dynamic> e) => ArticleDataEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<ArticleItemEntity>[] is M) {
+      return data
+              .map<ArticleItemEntity>(
+                (Map<String, dynamic> e) => ArticleItemEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
     if (<BannerEntity>[] is M) {
       return data
               .map<BannerEntity>(
                 (Map<String, dynamic> e) => BannerEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<HotKeywordEntity>[] is M) {
+      return data
+              .map<HotKeywordEntity>(
+                (Map<String, dynamic> e) => HotKeywordEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<UserInfoEntity>[] is M) {
+      return data
+              .map<UserInfoEntity>(
+                (Map<String, dynamic> e) => UserInfoEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<UserToolEntity>[] is M) {
+      return data
+              .map<UserToolEntity>(
+                (Map<String, dynamic> e) => UserToolEntity.fromJson(e),
               )
               .toList()
           as M;
