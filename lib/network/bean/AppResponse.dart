@@ -1,14 +1,15 @@
+// ignore: file_names
 import 'package:wanandroidflutter/constants/constans.dart';
 import 'package:wanandroidflutter/generated/json/base/json_convert_content.dart';
 
-class Appresponse<T> {
+class AppResponse<T> {
   int errorCode = -1;
   String? errorMsg;
   T? data;
 
-  Appresponse(this.errorCode, this.errorMsg, this.data);
+  AppResponse(this.errorCode, this.errorMsg, this.data);
 
-  Appresponse.fromJson(Map<String, dynamic> map) {
+  AppResponse.fromJson(Map<String, dynamic> map) {
     errorCode = (map['errorCode'] as int?) ?? -1;
     errorMsg = map['errorMsg'] as String?;
     if (map.containsKey('data')) {
