@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
@@ -117,7 +118,9 @@ class _HomePageState extends State<HomePage>
                             },
                             child: ArticleItemLayout(
                               itemEntity: _articleList[index],
-                              onCollectTap: () {},
+                              onCollectTap: () {
+                                _onCollectClick(_articleList[index]);
+                              },
                             ),
                           );
                         }, childCount: _articleList.length),
@@ -206,6 +209,29 @@ class _HomePageState extends State<HomePage>
     await _refreshRequest();
     _refreshController.finishRefresh();
     dataUpdate.refresh();
+  }
+
+  _onCollectClick(ArticleItemEntity itemEntity) async {
+    bool collected = itemEntity.collect;
+    AppResponse<dynamic> res =
+        await (collected
+            ? HttpGo.instance.post(
+              "${Api.uncollectArticel}${itemEntity.id}/json",
+            )
+            : HttpGo.instance.post(
+              "${Api.uncollectArticel}${itemEntity.id}/json",
+            ));
+
+    if (res.isSuccessful) {
+      Fluttertoast.showToast(msg: collected ? "取消收藏" : "收藏成功");
+      itemEntity.collect = !itemEntity.collect;
+    } else {
+      Fluttertoast.showToast(
+        msg:
+            (collected ? "取消失败" : "收藏失败") +
+            (res.errorMsg ?? res.errorCode.toString()),
+      );
+    }
   }
 
   @override
