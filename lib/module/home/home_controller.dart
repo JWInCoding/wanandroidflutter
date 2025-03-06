@@ -71,14 +71,11 @@ class HomeController extends GetxController {
       bool hasMoreData = await _loadRequest();
 
       if (hasMoreData) {
-        Wanlog.i("有更多数据，完成加载");
         refreshController.finishLoad(); // 正常完成
       } else {
-        Wanlog.i("无更多数据，设置 noMore 状态");
         refreshController.finishLoad(IndicatorResult.noMore); // 没有更多数据
       }
     } catch (e) {
-      Wanlog.e("加载更多失败:$e");
       _pageIndex.value--; // 加载失败，恢复页码
       refreshController.finishLoad(IndicatorResult.fail); // 加载失败
     }
