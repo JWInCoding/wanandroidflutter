@@ -64,7 +64,7 @@ class ArticleItemEntity {
   String? shareUser;
   late int superChapterId;
   String? superChapterName;
-  late List<dynamic> tags;
+  late List<TagEntity> tags;
   late String title;
   int? type;
   late int userId;
@@ -136,7 +136,7 @@ class ArticleItemEntity {
     String? shareUser,
     int? superChapterId,
     String? superChapterName,
-    List<dynamic>? tags,
+    List<TagEntity>? tags,
     String? title,
     int? type,
     int? userId,
@@ -181,5 +181,31 @@ class ArticleItemEntity {
     newArticle.visible = visible ?? this.visible;
     newArticle.zan = zan ?? this.zan;
     return newArticle;
+  }
+}
+
+@JsonSerializable()
+class TagEntity {
+  String name = "";
+  String url = "";
+
+  TagEntity({this.name = "", this.url = ""});
+
+  factory TagEntity.fromJson(Map<String, dynamic> json) {
+    return TagEntity(
+      name: json['name'] as String? ?? "",
+      url: json['url'] as String? ?? "",
+    );
+  }
+
+  Map<String, dynamic> toJson() => {'name': name, 'url': url};
+
+  @override
+  String toString() {
+    return jsonEncode(this);
+  }
+
+  TagEntity copyWith({String? name, String? url}) {
+    return TagEntity(name: name ?? this.name, url: url ?? this.url);
   }
 }
