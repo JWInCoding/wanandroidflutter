@@ -33,21 +33,24 @@ class _HomePageState extends State<HomePage>
   Widget build(BuildContext context) {
     super.build(context);
 
+    // 获取当前主题色
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Theme.of(context).primaryColor,
-        title: Text("首页", style: const TextStyle(color: Colors.white)),
+        backgroundColor: colorScheme.primary,
+        title: Text('首页', style: TextStyle(color: colorScheme.onPrimary)),
         actions: <Widget>[
           IconButton(
             onPressed: () {
               Wanlog.i("跳转搜索");
             },
-            icon: const Icon(Icons.search, color: Colors.white),
+            icon: Icon(Icons.search, color: colorScheme.onPrimary),
             tooltip: '搜索',
           ),
         ],
       ),
-      backgroundColor: Colors.white70,
+      backgroundColor: colorScheme.background,
       body: Obx(() {
         if (controller.isLoading.value) {
           return const Center(child: CircularProgressIndicator());
@@ -106,26 +109,29 @@ class _HomePageState extends State<HomePage>
     );
   }
 
-  List<Widget> _bannerList(List<BannerEntity> banners) =>
-      banners
-          .map(
-            (e) => Container(
-              margin: const EdgeInsets.all(5),
-              decoration: BoxDecoration(
-                border: Border.all(color: Colors.grey, width: 0.5),
-                borderRadius: const BorderRadius.all(Radius.circular(6)),
-              ),
-              child: ClipRRect(
-                borderRadius: const BorderRadius.all(Radius.circular(6)),
-                child: ImageUtil.network(
-                  url: e.imagePath,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
-                ),
+  List<Widget> _bannerList(List<BannerEntity> banners) {
+    final divoderColor = Theme.of(context).dividerColor;
+
+    return banners
+        .map(
+          (e) => Container(
+            margin: const EdgeInsets.all(5),
+            decoration: BoxDecoration(
+              border: Border.all(color: divoderColor, width: 0.5),
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+            ),
+            child: ClipRRect(
+              borderRadius: const BorderRadius.all(Radius.circular(6)),
+              child: ImageUtil.network(
+                url: e.imagePath,
+                fit: BoxFit.cover,
+                width: double.infinity,
               ),
             ),
-          )
-          .toList();
+          ),
+        )
+        .toList();
+  }
 
   @override
   bool get wantKeepAlive => true;

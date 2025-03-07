@@ -1,4 +1,3 @@
-// ignore: file_names
 import 'package:wanandroidflutter/constants/constans.dart';
 import 'package:wanandroidflutter/generated/json/base/json_convert_content.dart';
 

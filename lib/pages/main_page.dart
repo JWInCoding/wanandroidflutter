@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroidflutter/module/home/home_page.dart';
-import 'package:wanandroidflutter/pages/tab_page/mine_page.dart';
+import 'package:wanandroidflutter/module/setting_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/plaza_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/project_page.dart';
 
@@ -30,18 +30,21 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const ProjectPage(),
     const PlazaPage(),
-    const MinePage(),
+    const SettingPage(),
   ];
 
   @override
   Widget build(BuildContext context) {
+    // 获取当前主题色
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
         items: _generateBottomNavList(),
         iconSize: 24,
         selectedFontSize: 14,
         unselectedFontSize: 14,
-        selectedItemColor: Theme.of(context).primaryColor,
+        selectedItemColor: colorScheme.primary,
         unselectedItemColor: Colors.grey,
         currentIndex: _selectedItemIndex,
         onTap: _onNavItemTapped,

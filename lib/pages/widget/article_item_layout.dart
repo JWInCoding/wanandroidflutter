@@ -16,44 +16,58 @@ class ArticleItemLayout extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // 获取当前主题
+    final theme = Theme.of(context);
+    final isDarkMode = theme.brightness == Brightness.dark;
+
+    // 定义深浅模式下的颜色
+    final cardColor = isDarkMode ? theme.colorScheme.surface : Colors.white;
+    final cardShadowColor = isDarkMode ? Colors.black54 : Colors.black12;
+
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 8), // 保留外层容器
+      padding: const EdgeInsets.symmetric(horizontal: 8),
       child: Card(
-        surfaceTintColor: Colors.white,
-        color: Colors.white,
+        // 使用主题相关颜色
+        surfaceTintColor: cardColor,
+        color: cardColor,
+        shadowColor: cardShadowColor,
         elevation: 8,
         margin: const EdgeInsets.all(5),
         child: Padding(
-          // 为Card内容添加统一的5像素内边距
           padding: const EdgeInsets.all(10),
           child: Column(
             children: [
               Row(
                 children: [
                   if (itemEntity.fresh)
-                    const Text(
-                      "新",
-                      style: TextStyle(
-                        color: Colors.lightBlueAccent,
-                        fontSize: 10,
+                    Container(
+                      padding: const EdgeInsets.only(right: 5),
+                      child: Text(
+                        "新",
+                        style: TextStyle(
+                          // 使用主题的辅助色
+                          color: theme.colorScheme.primary,
+                          fontSize: 10,
+                        ),
                       ),
                     ),
-                  // 移除原有的左侧内边距
                   Text(
                     itemEntity.author?.isNotEmpty == true
                         ? itemEntity.author!
                         : itemEntity.shareUser ?? "",
+                    // 使用主题的文本颜色
+                    style: TextStyle(color: theme.colorScheme.onSurface),
                   ),
                   if (itemEntity.tags.isNotEmpty)
                     Container(
-                      margin: const EdgeInsets.only(left: 5), // 只保留左边距
+                      margin: const EdgeInsets.only(left: 5),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 5,
                         vertical: 2,
                       ),
                       decoration: BoxDecoration(
                         border: Border.all(
-                          color: _getTagColor(itemEntity.tags.first),
+                          color: _getTagColor(itemEntity.tags.first, theme),
                           width: 0.5,
                         ),
                         borderRadius: const BorderRadius.all(
@@ -63,7 +77,7 @@ class ArticleItemLayout extends StatelessWidget {
                       child: Text(
                         itemEntity.tags.first.name,
                         style: TextStyle(
-                          color: _getTagColor(itemEntity.tags.first),
+                          color: _getTagColor(itemEntity.tags.first, theme),
                           fontSize: 10,
                         ),
                       ),
@@ -71,12 +85,18 @@ class ArticleItemLayout extends StatelessWidget {
                   Expanded(
                     child: Container(
                       alignment: Alignment.centerRight,
-                      child: Text(itemEntity.niceDate),
+                      child: Text(
+                        itemEntity.niceDate,
+                        // 使用主题的次要文本颜色
+                        style: TextStyle(
+                          color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        ),
+                      ),
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 5), // 添加垂直间距
+              const SizedBox(height: 5),
               Row(
                 children: [
                   Expanded(
@@ -90,6 +110,8 @@ class ArticleItemLayout extends StatelessWidget {
                           fontSize: FontSize(14),
                           padding: HtmlPaddings.zero,
                           alignment: Alignment.topLeft,
+                          // 使用主题的文本颜色
+                          color: theme.colorScheme.onSurface,
                         ),
                         "body": Style(
                           margin: Margins.zero,
@@ -98,17 +120,24 @@ class ArticleItemLayout extends StatelessWidget {
                           fontSize: FontSize(14),
                           padding: HtmlPaddings.zero,
                           alignment: Alignment.topLeft,
+                          // 使用主题的文本颜色
+                          color: theme.colorScheme.onSurface,
                         ),
                       },
                     ),
                   ),
                 ],
               ),
-              const SizedBox(height: 5), // 添加垂直间距
+              const SizedBox(height: 5),
               Row(
                 children: [
-                  // 移除左侧内边距
-                  Text(_getSource()),
+                  Text(
+                    _getSource(),
+                    // 使用主题的次要文本颜色
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                    ),
+                  ),
                   Expanded(
                     child: Container(
                       width: 14,
@@ -125,7 +154,8 @@ class ArticleItemLayout extends StatelessWidget {
                               itemEntity.collect
                                   ? Icons.favorite
                                   : Icons.favorite_border,
-                              color: Colors.primaries.first,
+                              // 使用主题的主色
+                              color: Colors.redAccent,
                             ),
                           );
                         },
@@ -152,20 +182,24 @@ class ArticleItemLayout extends StatelessWidget {
     return sb.toString();
   }
 
-  Color _getTagColor(TagEntity tag) {
+  // 修改为接收theme参数
+  Color _getTagColor(TagEntity tag, ThemeData theme) {
+    // 在深色模式下调整标签颜色
+    final isDark = theme.brightness == Brightness.dark;
+
     switch (tag.name) {
       case "置顶":
-        return Colors.red;
+        return isDark ? Colors.redAccent : Colors.red;
       case "本站发布":
-        return Colors.lightBlue;
+        return isDark ? Colors.lightBlueAccent : Colors.lightBlue;
       case "问答":
-        return Colors.cyan;
+        return isDark ? Colors.cyanAccent : Colors.cyan;
       case "公众号":
-        return Colors.green;
+        return isDark ? Colors.lightGreenAccent : Colors.green;
       case "项目":
-        return Colors.teal;
+        return isDark ? Colors.tealAccent : Colors.teal;
       default:
-        return Colors.primaries.first;
+        return theme.colorScheme.primary;
     }
   }
 }
