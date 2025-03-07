@@ -39,7 +39,9 @@ class _HomePageState extends State<HomePage>
     return Scaffold(
       appBar: AppBar(
         backgroundColor: colorScheme.primary,
-        title: Text('首页', style: TextStyle(color: colorScheme.onPrimary)),
+        foregroundColor: colorScheme.onPrimary,
+        elevation: 0,
+        title: Text('首页'),
         actions: <Widget>[
           IconButton(
             onPressed: () {

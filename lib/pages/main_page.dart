@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:wanandroidflutter/module/home/home_page.dart';
-import 'package:wanandroidflutter/module/setting_page.dart';
+import 'package:wanandroidflutter/module/mine/mine_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/plaza_page.dart';
 import 'package:wanandroidflutter/pages/tab_page/project_page.dart';
 
@@ -30,7 +30,7 @@ class _MainPageState extends State<MainPage> {
     const HomePage(),
     const ProjectPage(),
     const PlazaPage(),
-    const SettingPage(),
+    const MinePage(),
   ];
 
   @override

@@ -13,8 +13,10 @@ class SettingPage extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('设置', style: TextStyle(color: colorScheme.onPrimary)),
+        title: Text('设置'),
+        foregroundColor: colorScheme.onPrimary,
         backgroundColor: colorScheme.primary,
+        elevation: 0,
       ),
       body: ListView(
         children: [
