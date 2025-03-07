@@ -45,7 +45,6 @@ class ArticleItemLayout extends StatelessWidget {
                       child: Text(
                         "新",
                         style: TextStyle(
-                          // 使用主题的辅助色
                           color: theme.colorScheme.primary,
                           fontSize: 10,
                         ),
@@ -55,43 +54,23 @@ class ArticleItemLayout extends StatelessWidget {
                     itemEntity.author?.isNotEmpty == true
                         ? itemEntity.author!
                         : itemEntity.shareUser ?? "",
-                    // 使用主题的文本颜色
                     style: TextStyle(color: theme.colorScheme.onSurface),
                   ),
+                  const SizedBox(width: 5),
                   if (itemEntity.tags.isNotEmpty)
-                    Container(
-                      margin: const EdgeInsets.only(left: 5),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 5,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        border: Border.all(
-                          color: _getTagColor(itemEntity.tags.first, theme),
-                          width: 0.5,
-                        ),
-                        borderRadius: const BorderRadius.all(
-                          Radius.circular(4),
-                        ),
-                      ),
-                      child: Text(
-                        itemEntity.tags.first.name,
-                        style: TextStyle(
-                          color: _getTagColor(itemEntity.tags.first, theme),
-                          fontSize: 10,
+                    Expanded(
+                      child: SingleChildScrollView(
+                        scrollDirection: Axis.horizontal,
+                        child: Row(
+                          children: _buildTagWidgets(itemEntity.tags, theme),
                         ),
                       ),
                     ),
-                  Expanded(
-                    child: Container(
-                      alignment: Alignment.centerRight,
-                      child: Text(
-                        itemEntity.niceDate,
-                        // 使用主题的次要文本颜色
-                        style: TextStyle(
-                          color: theme.colorScheme.onSurface.withOpacity(0.7),
-                        ),
-                      ),
+                  const SizedBox(width: 5),
+                  Text(
+                    itemEntity.niceDate,
+                    style: TextStyle(
+                      color: theme.colorScheme.onSurface.withOpacity(0.7),
                     ),
                   ),
                 ],
@@ -169,6 +148,23 @@ class ArticleItemLayout extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Widget> _buildTagWidgets(List<TagEntity> tags, ThemeData theme) {
+    return tags.map((tag) {
+      return Container(
+        margin: const EdgeInsets.only(right: 5),
+        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        decoration: BoxDecoration(
+          border: Border.all(color: _getTagColor(tag, theme), width: 0.5),
+          borderRadius: const BorderRadius.all(Radius.circular(4)),
+        ),
+        child: Text(
+          tag.name,
+          style: TextStyle(color: _getTagColor(tag, theme), fontSize: 10),
+        ),
+      );
+    }).toList();
   }
 
   String _getSource() {
