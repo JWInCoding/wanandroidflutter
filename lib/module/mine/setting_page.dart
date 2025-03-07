@@ -9,13 +9,14 @@ class SettingPage extends StatelessWidget {
   Widget build(BuildContext context) {
     final themeController = ThemeController.to;
     // 获取当前主题色
-    final colorScheme = Theme.of(context).colorScheme;
+    final appBarColorScheme = Theme.of(context).appBarTheme;
 
     return Scaffold(
       appBar: AppBar(
         title: Text('设置'),
-        foregroundColor: colorScheme.onPrimary,
-        backgroundColor: colorScheme.primary,
+        foregroundColor: appBarColorScheme.foregroundColor,
+        backgroundColor: appBarColorScheme.backgroundColor,
+        centerTitle: true,
         elevation: 0,
       ),
       body: ListView(

@@ -38,35 +38,44 @@ class ArticleItemLayout extends StatelessWidget {
           child: Column(
             children: [
               Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  if (itemEntity.fresh)
-                    Container(
-                      padding: const EdgeInsets.only(right: 5),
-                      child: Text(
-                        "新",
-                        style: TextStyle(
-                          color: theme.colorScheme.primary,
-                          fontSize: 10,
+                  Expanded(
+                    child: Row(
+                      children: [
+                        if (itemEntity.fresh)
+                          Container(
+                            padding: const EdgeInsets.only(right: 5),
+                            child: Text(
+                              "新",
+                              style: TextStyle(
+                                color: theme.colorScheme.primary,
+                                fontSize: 10,
+                              ),
+                            ),
+                          ),
+                        Text(
+                          itemEntity.author?.isNotEmpty == true
+                              ? itemEntity.author!
+                              : itemEntity.shareUser ?? "",
+                          style: TextStyle(color: theme.colorScheme.onSurface),
                         ),
-                      ),
+                        const SizedBox(width: 5),
+                        if (itemEntity.tags.isNotEmpty)
+                          Expanded(
+                            child: SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: _buildTagWidgets(
+                                  itemEntity.tags,
+                                  theme,
+                                ),
+                              ),
+                            ),
+                          ),
+                      ],
                     ),
-                  Text(
-                    itemEntity.author?.isNotEmpty == true
-                        ? itemEntity.author!
-                        : itemEntity.shareUser ?? "",
-                    style: TextStyle(color: theme.colorScheme.onSurface),
                   ),
-                  const SizedBox(width: 5),
-                  if (itemEntity.tags.isNotEmpty)
-                    Expanded(
-                      child: SingleChildScrollView(
-                        scrollDirection: Axis.horizontal,
-                        child: Row(
-                          children: _buildTagWidgets(itemEntity.tags, theme),
-                        ),
-                      ),
-                    ),
-                  const SizedBox(width: 5),
                   Text(
                     itemEntity.niceDate,
                     style: TextStyle(
@@ -154,14 +163,28 @@ class ArticleItemLayout extends StatelessWidget {
     return tags.map((tag) {
       return Container(
         margin: const EdgeInsets.only(right: 5),
-        padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+        // 调整水平内边距稍大一些，确保文本有足够空间
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 0),
         decoration: BoxDecoration(
           border: Border.all(color: _getTagColor(tag, theme), width: 0.5),
           borderRadius: const BorderRadius.all(Radius.circular(4)),
         ),
+        // 使用固定高度确保一致的垂直空间
+        height: 18,
+        // 添加居中对齐
+        alignment: Alignment.center,
         child: Text(
           tag.name,
-          style: TextStyle(color: _getTagColor(tag, theme), fontSize: 10),
+          style: TextStyle(
+            color: _getTagColor(tag, theme),
+            fontSize: 10,
+            // 添加行高设置以解决基线问题
+            height: 1.0,
+            // 确保文字在基线上对齐
+            textBaseline: TextBaseline.alphabetic,
+          ),
+          // 添加文本对齐设置
+          textAlign: TextAlign.center,
         ),
       );
     }).toList();

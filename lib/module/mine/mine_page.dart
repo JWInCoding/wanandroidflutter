@@ -33,7 +33,8 @@ class _MinePageState extends State<MinePage>
     super.build(context);
 
     final colorScheme = Theme.of(context).colorScheme;
-    final textTheme = Theme.of(context).textTheme;
+    final appBarColorScheme = Theme.of(context).appBarTheme;
+
     return Scaffold(
       backgroundColor: colorScheme.background,
       body: Stack(
@@ -43,13 +44,13 @@ class _MinePageState extends State<MinePage>
             left: 0,
             right: 0,
             height: 170,
-            child: Container(color: colorScheme.primary),
+            child: Container(color: appBarColorScheme.backgroundColor),
           ),
           SafeArea(
             child: Column(
               children: [
                 SizedBox(height: 30),
-                _buildUserInfoHeader(colorScheme, textTheme),
+                _buildUserInfoHeader(context),
                 Expanded(child: _buildListView(colorScheme)),
               ],
             ),
@@ -59,12 +60,16 @@ class _MinePageState extends State<MinePage>
     );
   }
 
-  Widget _buildUserInfoHeader(ColorScheme colorScheme, TextTheme textTheme) {
+  Widget _buildUserInfoHeader(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+    final appBarTheme = Theme.of(context).appBarTheme;
+    final textTheme = Theme.of(context).textTheme;
+
     final bool isLoggedIn = Get.find<UserController>().isLoggedIn.value;
 
     return GestureDetector(
       child: Container(
-        color: colorScheme.primary,
+        color: appBarTheme.backgroundColor,
         padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
         alignment: Alignment.center,
         child: Column(
@@ -72,7 +77,7 @@ class _MinePageState extends State<MinePage>
           children: [
             CircleAvatar(
               radius: 30,
-              backgroundColor: Colors.white,
+              // backgroundColor: Colors.white,
               child: Icon(Icons.person, color: colorScheme.primary, size: 30),
             ),
             const SizedBox(height: 10),
@@ -84,13 +89,13 @@ class _MinePageState extends State<MinePage>
                 Text(
                   isLoggedIn ? '用户名' : '未登录',
                   style: textTheme.titleMedium?.copyWith(
-                    color: Colors.white,
+                    color: appBarTheme.foregroundColor,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  isLoggedIn ? '等级：0  积分：0' : '点击登录',
+                  isLoggedIn ? '等级：0 积分：0' : '点击登录',
                   style: textTheme.bodySmall?.copyWith(color: Colors.white70),
                 ),
               ],

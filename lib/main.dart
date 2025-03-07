@@ -61,8 +61,8 @@ class MyApp extends StatelessWidget {
         color: Colors.white,
       ),
       appBarTheme: const AppBarTheme(
-        backgroundColor: Colors.white,
-        foregroundColor: Colors.black,
+        backgroundColor: Colors.blueAccent,
+        foregroundColor: Colors.white,
         elevation: 0,
       ),
     );
@@ -82,7 +82,7 @@ class MyApp extends StatelessWidget {
       ),
       appBarTheme: AppBarTheme(
         backgroundColor: Colors.grey[900],
-        foregroundColor: Colors.white,
+        foregroundColor: Colors.white70,
         elevation: 0,
       ),
     );

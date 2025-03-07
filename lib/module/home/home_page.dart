@@ -35,19 +35,21 @@ class _HomePageState extends State<HomePage>
 
     // 获取当前主题色
     final colorScheme = Theme.of(context).colorScheme;
+    final appBarColorScheme = Theme.of(context).appBarTheme;
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: appBarColorScheme.backgroundColor,
+        foregroundColor: appBarColorScheme.foregroundColor,
         elevation: 0,
         title: Text('首页'),
+        centerTitle: true,
         actions: <Widget>[
           IconButton(
             onPressed: () {
               Wanlog.i("跳转搜索");
             },
-            icon: Icon(Icons.search, color: colorScheme.onPrimary),
+            icon: Icon(Icons.search, color: appBarColorScheme.foregroundColor),
             tooltip: '搜索',
           ),
         ],
