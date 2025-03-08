@@ -26,7 +26,7 @@ class _HomePageState extends State<HomePage>
   void initState() {
     super.initState();
 
-    controller = Get.put(HomeController(), tag: "首页");
+    controller = Get.put(HomeController());
   }
 
   @override
@@ -43,7 +43,6 @@ class _HomePageState extends State<HomePage>
         foregroundColor: appBarColorScheme.foregroundColor,
         elevation: 0,
         title: Text('首页'),
-        centerTitle: true,
         actions: <Widget>[
           IconButton(
             onPressed: () {

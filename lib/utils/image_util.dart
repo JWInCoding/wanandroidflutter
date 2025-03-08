@@ -13,7 +13,7 @@ class ImageUtil {
   static final Color _defaultPlaceholderColor = Colors.grey[200]!;
 
   /// 默认图片淡入动画时长
-  static const Duration _defaultFadeInDuration = Duration(milliseconds: 300);
+  static const Duration _defaultFadeInDuration = Duration(milliseconds: 100);
 
   // MARK: - 公开方法
 

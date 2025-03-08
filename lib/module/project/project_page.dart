@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
+import 'package:wanandroidflutter/module/project/project_controller.dart';
 import 'package:wanandroidflutter/module/project/project_list_page.dart';
-import 'package:wanandroidflutter/network/api.dart';
-import 'package:wanandroidflutter/network/bean/AppResponse.dart';
-import 'package:wanandroidflutter/network/bean/project_category_entity.dart';
-import 'package:wanandroidflutter/network/request_util.dart';
 
 class ProjectPage extends StatefulWidget {
   const ProjectPage({super.key});
@@ -17,61 +15,55 @@ class _ProjectPageState extends State<ProjectPage>
     with
         BasePage<ProjectPage>,
         AutomaticKeepAliveClientMixin,
-        SingleTickerProviderStateMixin {
-  List<ProjectCategoryEntity> _tabs = [];
+        TickerProviderStateMixin {
+  final ProjectController _controller = Get.put(ProjectController());
 
   TabController? _tabController;
-
-  _getCategroyList() async {
-    AppResponse<List<ProjectCategoryEntity>> categroyRes = await HttpGo.instance
-        .get(Api.projectCategory);
-    if (categroyRes.isSuccessful && categroyRes.data != null) {
-      _tabs = categroyRes.data!;
-    }
-    setState(() {});
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    _getCategroyList();
-  }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
-    if (_tabs.isEmpty) {
-      return const Center(
-        widthFactor: 1,
-        heightFactor: 1,
-        child: CircularProgressIndicator(),
-      );
-    }
+    return Obx(() {
+      if (_controller.isLoading.value) {
+        return Scaffold(
+          appBar: AppBar(toolbarHeight: 0),
+          body: const Center(child: CircularProgressIndicator()),
+        );
+      } else {
+        if (_tabController == null ||
+            _tabController!.length != _controller.tabs.length) {
+          _tabController?.dispose();
+          _tabController = TabController(
+            length: _controller.tabs.length,
+            vsync: this,
+          );
+        }
+        return Scaffold(
+          appBar: AppBar(
+            toolbarHeight: 0,
+            bottom: TabBar(
+              labelColor: Colors.white,
+              unselectedLabelColor: Colors.black87,
+              tabs: _controller.tabs.map((e) => Tab(text: e.name)).toList(),
+              isScrollable: true,
+              controller: _tabController,
+            ),
+          ),
+          body: TabBarView(
+            controller: _tabController,
+            children:
+                _controller.tabs.map((e) => ProjectListPage(e.id)).toList(),
+          ),
+        );
+      }
+    });
+  }
 
-    _tabController ??= TabController(length: _tabs.length, vsync: this);
-
-    return Scaffold(
-      appBar: AppBar(
-        toolbarHeight: 0,
-        bottom: TabBar(
-          labelColor: Colors.white,
-          unselectedLabelColor: Colors.black87,
-          tabs:
-              _tabs.map((e) {
-                return Tab(text: e.name);
-              }).toList(),
-          isScrollable: true,
-          controller: _tabController,
-        ),
-      ),
-      body: TabBarView(
-        controller: _tabController,
-        children:
-            _tabs.map((e) {
-              return ProjectListPage(e.id);
-            }).toList(),
-      ),
-    );
+  @override
+  void dispose() {
+    _tabController?.dispose();
+    _controller.dispose();
+    super.dispose();
   }
 
   @override
