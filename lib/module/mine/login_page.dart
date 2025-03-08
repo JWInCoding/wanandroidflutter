@@ -23,23 +23,32 @@ class _LoginPageState extends State<LoginPage> with BasePage<LoginPage> {
   final bool _obscurePassword = true;
 
   Future<void> _handleLogin() async {
-    showLoadingDialog();
-    var data = {
-      "username": _usernameController.text.trim(),
-      "password": _passwordController.text.trim(),
-    };
-    AppResponse<UserInfoEntity> res = await HttpGo.instance.post(
-      Api.login,
-      data: data,
-    );
-    dismissLoading();
-    if (res.isSuccessful) {
-      Fluttertoast.showToast(msg: '登录成功');
-      Get.find<UserController>().loginSuccess(res.data!);
-      Get.back();
-    } else {
-      Fluttertoast.showToast(msg: '登录失败：${res.errorMsg}');
+    // 使用 Form 的 validate() 方法来触发所有表单字段的验证
+    if (_formKey.currentState!.validate()) {
+      // 只有当所有验证都通过时，才执行登录逻辑
+      showLoadingDialog();
+
+      var data = {
+        "username": _usernameController.text.trim(),
+        "password": _passwordController.text.trim(),
+      };
+
+      AppResponse<UserInfoEntity> res = await HttpGo.instance.post(
+        Api.login,
+        data: data,
+      );
+
+      dismissLoading();
+
+      if (res.isSuccessful) {
+        Fluttertoast.showToast(msg: '登录成功');
+        Get.find<UserController>().loginSuccess(res.data!);
+        Get.back();
+      } else {
+        Fluttertoast.showToast(msg: '登录失败：${res.errorMsg}');
+      }
     }
+    // 如果验证不通过，不需要做任何事情，因为 TextFormField 会自动显示错误消息
   }
 
   @override
@@ -56,7 +65,8 @@ class _LoginPageState extends State<LoginPage> with BasePage<LoginPage> {
 
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: appBarColorScheme.backgroundColor,
+        backgroundColor: colorScheme.background,
+        foregroundColor: colorScheme.primary,
         elevation: 0,
       ),
       body: SafeArea(
