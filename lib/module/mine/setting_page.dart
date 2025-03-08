@@ -19,7 +19,6 @@ class SettingPage extends StatelessWidget {
         title: Text('设置'),
         foregroundColor: appBarColorScheme.foregroundColor,
         backgroundColor: appBarColorScheme.backgroundColor,
-        centerTitle: true,
         elevation: 0,
       ),
       body: Column(
