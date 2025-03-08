@@ -65,7 +65,7 @@ class _MinePageState extends State<MinePage>
     final appBarTheme = Theme.of(context).appBarTheme;
     final textTheme = Theme.of(context).textTheme;
 
-    final bool isLoggedIn = Get.find<UserController>().isLoggedIn.value;
+    final user = Get.find<UserController>();
 
     return GestureDetector(
       child: Container(
@@ -77,7 +77,6 @@ class _MinePageState extends State<MinePage>
           children: [
             CircleAvatar(
               radius: 30,
-              // backgroundColor: Colors.white,
               child: Icon(Icons.person, color: colorScheme.primary, size: 30),
             ),
             const SizedBox(height: 10),
@@ -86,17 +85,21 @@ class _MinePageState extends State<MinePage>
               mainAxisAlignment: MainAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text(
-                  isLoggedIn ? '用户名' : '未登录',
-                  style: textTheme.titleMedium?.copyWith(
-                    color: appBarTheme.foregroundColor,
-                    fontWeight: FontWeight.bold,
+                Obx(
+                  () => Text(
+                    user.isLoggedIn.value ? user.userName : '未登录',
+                    style: textTheme.titleMedium?.copyWith(
+                      color: appBarTheme.foregroundColor,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 4),
-                Text(
-                  isLoggedIn ? '等级：0 积分：0' : '点击登录',
-                  style: textTheme.bodySmall?.copyWith(color: Colors.white70),
+                Obx(
+                  () => Text(
+                    user.isLoggedIn.value ? '积分：${user.userCoinCount}' : '点击登录',
+                    style: textTheme.bodySmall?.copyWith(color: Colors.white70),
+                  ),
                 ),
               ],
             ),
@@ -104,7 +107,7 @@ class _MinePageState extends State<MinePage>
         ),
       ),
       onTap: () {
-        if (isLoggedIn == false) {
+        if (user.isLoggedIn.value == false) {
           Get.to(() => const LoginPage(), fullscreenDialog: true);
         }
       },

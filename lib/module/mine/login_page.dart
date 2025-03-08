@@ -61,7 +61,6 @@ class _LoginPageState extends State<LoginPage> with BasePage<LoginPage> {
   @override
   Widget build(BuildContext context) {
     final colorScheme = Theme.of(context).colorScheme;
-    final appBarColorScheme = Theme.of(context).appBarTheme;
 
     return Scaffold(
       appBar: AppBar(

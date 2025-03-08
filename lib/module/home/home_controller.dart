@@ -1,6 +1,7 @@
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
+import 'package:wanandroidflutter/module/mine/login_page.dart';
 import 'package:wanandroidflutter/network/api.dart';
 import 'package:wanandroidflutter/network/bean/AppResponse.dart';
 import 'package:wanandroidflutter/network/bean/article_data_entity.dart';
@@ -139,6 +140,11 @@ class HomeController extends GetxController {
 
   // 收藏/取消
   Future<void> toggleCollect(ArticleItemEntity itemEntity) async {
+    if (Get.find<UserController>().isLoggedIn.value == false) {
+      Get.to(() => LoginPage());
+      return;
+    }
+
     bool collected = itemEntity.collect;
 
     AppResponse<dynamic> res =
