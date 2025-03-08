@@ -1,6 +1,8 @@
 import 'package:wanandroidflutter/network/bean/article_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
 import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
+import 'package:wanandroidflutter/network/bean/project_category_entity.dart';
+import 'package:wanandroidflutter/network/bean/project_list_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
 import 'package:wanandroidflutter/network/bean/user_tool_entity.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
@@ -21,6 +23,10 @@ class JsonConvert {
     (HotKeywordEntity).toString(): HotKeywordEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
     (UserToolEntity).toString(): UserToolEntity.fromJson,
+    (ProjectCategoryEntity).toString(): ProjectCategoryEntity.fromJson,
+    (ProjectListDataEntity).toString(): ProjectListDataEntity.fromJson,
+    (ProjectListDataItemEntity).toString(): ProjectListDataItemEntity.fromJson,
+    (ProjectListDataDatasTags).toString(): ProjectListDataDatasTags.fromJson,
   };
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
@@ -167,6 +173,40 @@ class JsonConvert {
       return data
               .map<UserToolEntity>(
                 (Map<String, dynamic> e) => UserToolEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<ProjectCategoryEntity>[] is M) {
+      return data
+              .map<ProjectCategoryEntity>(
+                (Map<String, dynamic> e) => ProjectCategoryEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<ProjectListDataEntity>[] is M) {
+      return data
+              .map<ProjectListDataEntity>(
+                (Map<String, dynamic> e) => ProjectListDataEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<ProjectListDataItemEntity>[] is M) {
+      return data
+              .map<ProjectListDataItemEntity>(
+                (Map<String, dynamic> e) =>
+                    ProjectListDataItemEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<ProjectListDataDatasTags>[] is M) {
+      return data
+              .map<ProjectListDataDatasTags>(
+                (Map<String, dynamic> e) =>
+                    ProjectListDataDatasTags.fromJson(e),
               )
               .toList()
           as M;
