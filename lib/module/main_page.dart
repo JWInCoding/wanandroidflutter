@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:wanandroidflutter/module/home/home_page.dart';
 import 'package:wanandroidflutter/module/mine/mine_page.dart';
 import 'package:wanandroidflutter/module/project/project_page.dart';
-import 'package:wanandroidflutter/pages/tab_page/plaza_page.dart';
+import 'package:wanandroidflutter/module/tree/tree_page.dart';
 
 class MainPage extends StatefulWidget {
   final String title;
@@ -18,18 +18,18 @@ class _MainPageState extends State<MainPage> {
 
   final PageController _pageController = PageController(initialPage: 0);
 
-  final List<String> _titles = ["首页", "项目", "广场", "我的"];
+  final List<String> _titles = ["首页", "项目", "体系", "我的"];
   final List<Widget> _navIcons = [
     const Icon(Icons.home),
-    const Icon(Icons.ac_unit),
-    const Icon(Icons.animation),
+    const Icon(Icons.category),
+    const Icon(Icons.account_tree),
     const Icon(Icons.verified_user_rounded),
   ];
 
   final List<Widget> _pages = [
     const HomePage(),
     const ProjectPage(),
-    const PlazaPage(),
+    const TreePage(),
     const MinePage(),
   ];
 

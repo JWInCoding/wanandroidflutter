@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
+import 'package:wanandroidflutter/module/detail_page.dart';
 import 'package:wanandroidflutter/module/project/project_list_controller.dart';
-import 'package:wanandroidflutter/pages/detail_page.dart';
 import 'package:wanandroidflutter/utils/image_util.dart';
 
 class ProjectListPage extends StatefulWidget {
