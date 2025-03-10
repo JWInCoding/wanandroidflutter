@@ -3,10 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
-import 'package:wanandroidflutter/network/api.dart';
-import 'package:wanandroidflutter/network/bean/AppResponse.dart';
-import 'package:wanandroidflutter/network/bean/project_list_data_entity.dart';
-import 'package:wanandroidflutter/network/request_util.dart';
+import 'package:wanandroidflutter/module/project/project_list_controller.dart';
 import 'package:wanandroidflutter/pages/detail_page.dart';
 import 'package:wanandroidflutter/utils/image_util.dart';
 
@@ -21,62 +18,46 @@ class ProjectListPage extends StatefulWidget {
 
 class _ProjectListPageState extends State<ProjectListPage>
     with BasePage<ProjectListPage>, AutomaticKeepAliveClientMixin {
-  var _currentPageIndex = 1;
-
-  List<ProjectListDataItemEntity> data = [];
-
-  final EasyRefreshController _refreshController = EasyRefreshController(
-    controlFinishRefresh: true,
-    controlFinishLoad: true,
-  );
+  late ProjectListController _controller;
 
   @override
   void initState() {
     super.initState();
-    _getProjectListData();
+    _controller = Get.put(
+      ProjectListController(widget.cid),
+      tag: widget.cid.toString(),
+    );
   }
 
-  _getProjectListData() async {
-    AppResponse<ProjectListDataEntity> res = await HttpGo.instance.get(
-      "${Api.projectList}$_currentPageIndex/json",
-      queryParams: {"cid": widget.cid},
-    );
+  @override
+  void dispose() {
+    Get.delete<ProjectListController>(tag: widget.cid.toString());
 
-    if (_currentPageIndex == 1) {
-      data.clear();
-      _refreshController.finishRefresh();
-    } else {
-      _refreshController.finishLoad();
-    }
-
-    if (res.isSuccessful) {
-      setState(() {
-        data.addAll(res.data!.datas);
-      });
-    }
+    super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     super.build(context);
 
-    return EasyRefresh.builder(
-      controller: _refreshController,
-      onRefresh: () {
-        _currentPageIndex = 1;
-        _getProjectListData();
-      },
-      onLoad: () {
-        _currentPageIndex++;
-        _getProjectListData();
-      },
-      childBuilder: (context, physics) {
-        return Padding(
+    return Obx(() {
+      if (_controller.projectList.isEmpty) {
+        if (_controller.isLoading.value) {
+          return const Center(child: CircularProgressIndicator());
+        }
+        if (_controller.hasError.value) {
+          return RetryWidget(onTapRetry: _controller.refreshData);
+        }
+      }
+      return EasyRefresh(
+        controller: _controller.refreshController,
+        onRefresh: _controller.refreshData,
+        onLoad: _controller.loadMoreData,
+        child: Padding(
           padding: const EdgeInsets.fromLTRB(15, 15, 15, 0),
           child: GridView.builder(
             clipBehavior: Clip.none,
-            physics: physics,
-            itemCount: data.length,
+            itemCount: _controller.projectList.length,
             gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
               mainAxisSpacing: 8,
@@ -86,19 +67,24 @@ class _ProjectListPageState extends State<ProjectListPage>
             itemBuilder: (context, index) {
               return GestureDetector(
                 onTap: () {
-                  Get.to(() => DetailPage(data[index].link, data[index].title));
+                  Get.to(
+                    () => DetailPage(
+                      _controller.projectList[index].link,
+                      _controller.projectList[index].title,
+                    ),
+                  );
                 },
                 child: _generateItem(context, index),
               );
             },
           ),
-        );
-      },
-    );
+        ),
+      );
+    });
   }
 
   Widget _generateItem(BuildContext context, int index) {
-    var entity = data[index];
+    var entity = _controller.projectList[index];
     final cardTheme = Theme.of(context).cardTheme;
 
     return SizedBox(

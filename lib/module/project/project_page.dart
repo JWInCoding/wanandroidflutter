@@ -42,8 +42,10 @@ class _ProjectPageState extends State<ProjectPage>
           appBar: AppBar(
             toolbarHeight: 0,
             bottom: TabBar(
-              labelColor: Colors.white,
-              unselectedLabelColor: Colors.black87,
+              labelColor: Theme.of(context).appBarTheme.foregroundColor,
+              unselectedLabelColor: Colors.grey[800],
+              indicatorColor: Theme.of(context).appBarTheme.foregroundColor,
+              dividerHeight: 0,
               tabs: _controller.tabs.map((e) => Tab(text: e.name)).toList(),
               isScrollable: true,
               controller: _tabController,
