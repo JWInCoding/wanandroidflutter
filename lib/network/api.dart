@@ -52,4 +52,10 @@ class Api {
 
   /// todoList
   static const String todoList = "lg/todo/v2/list/";
+
+  // 体系
+  static const String treeList = "tree/json";
+
+  /// 体系的文章列表
+  static const String treeArticle = "article/list/";
 }

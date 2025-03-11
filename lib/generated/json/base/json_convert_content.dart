@@ -3,6 +3,7 @@ import 'package:wanandroidflutter/network/bean/banner_entity.dart';
 import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_category_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_list_data_entity.dart';
+import 'package:wanandroidflutter/network/bean/tree_list_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
 import 'package:wanandroidflutter/network/bean/user_tool_entity.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
@@ -27,6 +28,7 @@ class JsonConvert {
     (ProjectListDataEntity).toString(): ProjectListDataEntity.fromJson,
     (ProjectListDataItemEntity).toString(): ProjectListDataItemEntity.fromJson,
     (ProjectListDataDatasTags).toString(): ProjectListDataDatasTags.fromJson,
+    (TreeListDataEntity).toString(): TreeListDataEntity.fromJson,
   };
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {
@@ -207,6 +209,14 @@ class JsonConvert {
               .map<ProjectListDataDatasTags>(
                 (Map<String, dynamic> e) =>
                     ProjectListDataDatasTags.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<TreeListDataEntity>[] is M) {
+      return data
+              .map<TreeListDataEntity>(
+                (Map<String, dynamic> e) => TreeListDataEntity.fromJson(e),
               )
               .toList()
           as M;

@@ -33,10 +33,63 @@ class _TreePageState extends State<TreePage>
       } else {
         return Scaffold(
           appBar: _buildAppBar(context),
-          body: const Center(child: Text('功能开发中')),
+          body: _buildListView(context),
         );
       }
     });
+  }
+
+  Widget _buildListView(BuildContext context) {
+    final cardScheme = Theme.of(context).cardTheme;
+    return ListView.builder(
+      padding: const EdgeInsets.all(15),
+      itemCount: _controller.treeList.length,
+      itemBuilder: (context, index) {
+        final tree = _controller.treeList[index];
+        return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: const EdgeInsets.symmetric(vertical: 15),
+              child: Text(
+                tree.name,
+                style: const TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                ),
+              ),
+            ),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children:
+                  tree.children.map((childTree) {
+                    return Container(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 12,
+                        vertical: 8,
+                      ),
+                      decoration: BoxDecoration(
+                        color: cardScheme.surfaceTintColor,
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: GestureDetector(
+                        child: Text(
+                          childTree.name,
+                          style: const TextStyle(fontSize: 14),
+                        ),
+                        onTap: () {
+                          Fluttertoast.showToast(msg: childTree.name);
+                        },
+                      ),
+                    );
+                  }).toList(),
+            ),
+            const SizedBox(height: 8),
+          ],
+        );
+      },
+    );
   }
 
   // 提取公共的 AppBar 逻辑
