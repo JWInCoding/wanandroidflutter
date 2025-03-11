@@ -60,6 +60,8 @@ class ProjectListController extends GetxController {
   }
 
   Future<void> loadMoreData() async {
+    isLoading.value = true;
+    hasError.value = false;
     try {
       _pageIndex.value++;
       bool hasMoreData = await _loadRequest();
@@ -72,13 +74,13 @@ class ProjectListController extends GetxController {
     } catch (e) {
       _pageIndex.value--;
       refreshController.finishLoad(IndicatorResult.fail);
+    } finally {
+      isLoading.value = false;
+      hasError.value = true;
     }
   }
 
   Future<bool> _loadRequest() async {
-    isLoading.value = true;
-    hasError.value = false;
-
     AppResponse<ProjectListDataEntity> res = await HttpGo.instance.get(
       "${Api.projectList}${_pageIndex.value}/json",
       queryParams: {"cid": cid},

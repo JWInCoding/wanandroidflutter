@@ -67,6 +67,10 @@ class _HomePageState extends State<HomePage>
         if (controller.hasError.value) {
           return RetryWidget(onTapRetry: controller.refreshData);
         }
+        if (controller.articleList.isEmpty &&
+            controller.bannerData.value == null) {
+          return EmptyWidget();
+        }
 
         // 检查是否有Banner数据
         final hasBanner =

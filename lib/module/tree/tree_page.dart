@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
+import 'package:wanandroidflutter/module/tree/tree_list_page.dart';
 import 'package:wanandroidflutter/module/tree/tree_page_controller.dart';
 
 class TreePage extends StatefulWidget {
@@ -79,7 +80,9 @@ class _TreePageState extends State<TreePage>
                           style: const TextStyle(fontSize: 14),
                         ),
                         onTap: () {
-                          Fluttertoast.showToast(msg: childTree.name);
+                          Get.to(
+                            () => TreeListPage(childTree.id, childTree.name),
+                          );
                         },
                       ),
                     );
