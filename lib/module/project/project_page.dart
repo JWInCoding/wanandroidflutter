@@ -63,6 +63,7 @@ class _ProjectPageState extends State<ProjectPage>
                 tabs: _controller.tabs.map((e) => Tab(text: e.name)).toList(),
                 isScrollable: true,
                 controller: _tabController,
+                tabAlignment: TabAlignment.start,
               ),
             ),
           ),
