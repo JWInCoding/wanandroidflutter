@@ -4,8 +4,9 @@ import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_category_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_list_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/tree_list_data_entity.dart';
+import 'package:wanandroidflutter/network/bean/user_coin_entity.dart';
+import 'package:wanandroidflutter/network/bean/user_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/user_info_entity.dart';
-import 'package:wanandroidflutter/network/bean/user_tool_entity.dart';
 import 'package:wanandroidflutter/utils/log_util.dart';
 
 JsonConvert jsonConvert = JsonConvert();
@@ -22,8 +23,9 @@ class JsonConvert {
     (ArticleItemEntity).toString(): ArticleItemEntity.fromJson,
     (BannerEntity).toString(): BannerEntity.fromJson,
     (HotKeywordEntity).toString(): HotKeywordEntity.fromJson,
+    (UserDataEntity).toString(): UserDataEntity.fromJson,
     (UserInfoEntity).toString(): UserInfoEntity.fromJson,
-    (UserToolEntity).toString(): UserToolEntity.fromJson,
+    (UserCoinEntity).toString(): UserCoinEntity.fromJson,
     (ProjectCategoryEntity).toString(): ProjectCategoryEntity.fromJson,
     (ProjectListDataEntity).toString(): ProjectListDataEntity.fromJson,
     (ProjectListDataItemEntity).toString(): ProjectListDataItemEntity.fromJson,
@@ -171,10 +173,26 @@ class JsonConvert {
               .toList()
           as M;
     }
-    if (<UserToolEntity>[] is M) {
+    if (<UserDataEntity>[] is M) {
       return data
-              .map<UserToolEntity>(
-                (Map<String, dynamic> e) => UserToolEntity.fromJson(e),
+              .map<UserDataEntity>(
+                (Map<String, dynamic> e) => UserDataEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<UserInfoEntity>[] is M) {
+      return data
+              .map<UserInfoEntity>(
+                (Map<String, dynamic> e) => UserInfoEntity.fromJson(e),
+              )
+              .toList()
+          as M;
+    }
+    if (<UserCoinEntity>[] is M) {
+      return data
+              .map<UserCoinEntity>(
+                (Map<String, dynamic> e) => UserCoinEntity.fromJson(e),
               )
               .toList()
           as M;

@@ -42,7 +42,7 @@ class _LoginPageState extends State<LoginPage> with BasePage<LoginPage> {
 
       if (res.isSuccessful) {
         Fluttertoast.showToast(msg: '登录成功');
-        Get.find<UserController>().loginSuccess(res.data!);
+        Get.find<UserController>().fetchUserInfo();
         Get.back();
       } else {
         Fluttertoast.showToast(msg: '登录失败：${res.errorMsg}');

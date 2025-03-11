@@ -11,6 +11,9 @@ class Api {
   /// 登录
   static const String login = "user/login";
 
+  /// 用户信息
+  static const String userInfo = "user/lg/userinfo/json";
+
   /// 注册
   static const String register = "user/register";
 
@@ -53,7 +56,7 @@ class Api {
   /// todoList
   static const String todoList = "lg/todo/v2/list/";
 
-  // 体系
+  /// 体系
   static const String treeList = "tree/json";
 
   /// 体系的文章列表

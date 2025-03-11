@@ -70,7 +70,7 @@ class _MinePageState extends State<MinePage>
     return GestureDetector(
       child: Container(
         color: appBarTheme.backgroundColor,
-        padding: const EdgeInsets.fromLTRB(16, 0, 16, 30),
+        padding: const EdgeInsets.fromLTRB(16, 0, 16, 20),
         alignment: Alignment.center,
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
@@ -94,10 +94,12 @@ class _MinePageState extends State<MinePage>
                     ),
                   ),
                 ),
-                const SizedBox(height: 4),
+                const SizedBox(height: 5),
                 Obx(
                   () => Text(
-                    user.isLoggedIn.value ? '积分：${user.userCoinCount}' : '点击登录',
+                    user.isLoggedIn.value
+                        ? '等级：${user.userLevel}    排名：${user.userRank}'
+                        : '点击登录',
                     style: textTheme.bodySmall?.copyWith(color: Colors.white70),
                   ),
                 ),

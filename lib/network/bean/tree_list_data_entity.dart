@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:wanandroidflutter/generated/json/base/json_field.dart';
-import 'package:wanandroidflutter/generated/tree_list_data_entity.g.dart';
+import 'package:wanandroidflutter/generated/json/tree_list_data_entity.g.dart';
 
 @JsonSerializable()
 class TreeListDataEntity {
