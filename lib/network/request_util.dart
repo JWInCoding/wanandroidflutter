@@ -40,7 +40,15 @@ class HttpGo {
 
   CookieJar? cookieJar;
 
+  bool _isInitialized = false;
+
+  // 私有构造函数
   HttpGo._internal() {
+    _initBase();
+  }
+
+  // 基础初始化，不包含需要异步的操作
+  void _initBase() {
     _dio = Dio(
       BaseOptions(
         contentType: Headers.formUrlEncodedContentType,
@@ -65,18 +73,36 @@ class HttpGo {
     );
     // 添加缓存拦截器
     _dio.interceptors.add(DioCacheInterceptor(options: options));
-
-    // cookie 管理
-    Future<Directory> dirResult = getApplicationDocumentsDirectory();
-    dirResult.then((value) {
-      CookieManager cookieManage = CookieManager(
-        PersistCookieJar(storage: FileStorage("${value.path}/.cookies/")),
-      );
-      cookieJar = cookieManage.cookieJar;
-      _dio.interceptors.add(cookieManage);
-    });
-
     _dio.interceptors.addAll(_interceptors);
+  }
+
+  // 公共初始化方法，应在应用启动时调用
+  Future<void> init() async {
+    if (_isInitialized) return;
+
+    try {
+      // 获取文档目录
+      Directory appDocDir = await getApplicationDocumentsDirectory();
+      String cookiePath = "${appDocDir.path}/.cookies/";
+
+      // 确保目录存在
+      Directory(cookiePath).createSync(recursive: true);
+
+      // 创建持久化的CookieJar
+      PersistCookieJar persistentCookies = PersistCookieJar(
+        storage: FileStorage(cookiePath),
+      );
+
+      // 创建并添加CookieManager
+      CookieManager cookieManager = CookieManager(persistentCookies);
+      cookieJar = cookieManager.cookieJar;
+      _dio.interceptors.add(cookieManager);
+
+      Wanlog.i("Cookie管理器初始化成功: $cookiePath");
+      _isInitialized = true;
+    } catch (e) {
+      Wanlog.e("Cookie管理器初始化失败: $e");
+    }
   }
 
   Future<AppResponse<T>> request<T>(
@@ -89,6 +115,10 @@ class HttpGo {
     ProgressCallback? progressCallback,
     ProgressCallback? receiveCallback,
   }) async {
+    // 确保已初始化
+    if (!_isInitialized) {
+      await init();
+    }
     AppResponse<T> result;
     try {
       Response<String> response = await _dio.request(
