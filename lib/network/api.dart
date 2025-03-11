@@ -14,6 +14,9 @@ class Api {
   /// 用户信息
   static const String userInfo = "user/lg/userinfo/json";
 
+  /// 积分列表
+  static const String coinList = "/lg/coin/list/";
+
   /// 注册
   static const String register = "user/register";
 

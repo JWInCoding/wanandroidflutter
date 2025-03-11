@@ -50,6 +50,7 @@ class UserController extends GetxController {
         json.decoder.convert(infoContent),
       );
       _isLoggedIn.value = true;
+      fetchUserInfo();
     } catch (e) {
       Wanlog.e("获取本地用户信息失败 $e");
     }
@@ -61,7 +62,7 @@ class UserController extends GetxController {
       if (res.isSuccessful) {
         loginSuccess(res.data!);
       } else {
-        Fluttertoast.showToast(msg: '获取用户信息失败');
+        Fluttertoast.showToast(msg: '获取用户信息失败 ${res.errorMsg}');
       }
     } catch (e) {
       Wanlog.e("获取用户信息失败 $e");
@@ -84,6 +85,7 @@ class UserController extends GetxController {
 
   logout() {
     _userInfo.value = null;
+    _userCoin.value = null;
     _isLoggedIn.value = false;
     HttpGo.instance.cookieJar?.deleteAll();
     try {

@@ -1,5 +1,7 @@
 import 'package:wanandroidflutter/network/bean/article_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
+import 'package:wanandroidflutter/network/bean/coin_data_entity.dart';
+import 'package:wanandroidflutter/network/bean/coin_list_data_entity.dart';
 import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_category_entity.dart';
 import 'package:wanandroidflutter/network/bean/project_list_data_entity.dart';
@@ -31,6 +33,8 @@ class JsonConvert {
     (ProjectListDataItemEntity).toString(): ProjectListDataItemEntity.fromJson,
     (ProjectListDataDatasTags).toString(): ProjectListDataDatasTags.fromJson,
     (TreeListDataEntity).toString(): TreeListDataEntity.fromJson,
+    (CoinDataEntity).toString(): CoinDataEntity.fromJson,
+    (CoinListDataItemEntity).toString(): CoinListDataItemEntity.fromJson,
   };
 
   T? convert<T>(dynamic value, {EnumConvertFunction? enumConvert}) {

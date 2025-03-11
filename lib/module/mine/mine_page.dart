@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
 import 'package:wanandroidflutter/module/mine/login_page.dart';
+import 'package:wanandroidflutter/module/mine/mine_coin_page.dart';
 import 'package:wanandroidflutter/module/mine/setting_page.dart';
 import 'package:wanandroidflutter/user.dart';
 
@@ -21,10 +22,7 @@ class _MinePageState extends State<MinePage>
 
     // 设置状态栏颜色为透明
     SystemChrome.setSystemUIOverlayStyle(
-      const SystemUiOverlayStyle(
-        statusBarColor: Colors.transparent,
-        statusBarIconBrightness: Brightness.light,
-      ),
+      const SystemUiOverlayStyle(statusBarColor: Colors.transparent),
     );
   }
 
@@ -43,7 +41,7 @@ class _MinePageState extends State<MinePage>
             top: 0,
             left: 0,
             right: 0,
-            height: 170,
+            height: 110,
             child: Container(color: appBarColorScheme.backgroundColor),
           ),
           SafeArea(
@@ -120,6 +118,29 @@ class _MinePageState extends State<MinePage>
     return ListView(
       physics: const ClampingScrollPhysics(),
       children: [
+        Obx(
+          () => _buildFuntionItem(
+            icon: Icons.grade,
+            title: '我的积分',
+            rightText: Get.find<UserController>().userCoinCount.toString(),
+            onTap: () {
+              if (UserController.to.isLoggedIn.value) {
+                Get.to(() => const MineCoinPage());
+              } else {
+                Get.to(() => const LoginPage());
+              }
+            },
+            colorScheme: colorScheme,
+          ),
+        ),
+        _buildFuntionItem(
+          icon: Icons.favorite_border,
+          title: '我的收藏',
+          onTap: () {
+            Get.to(() => const SettingPage());
+          },
+          colorScheme: colorScheme,
+        ),
         _buildFuntionItem(
           icon: Icons.settings_outlined,
           title: '设置',
@@ -135,17 +156,32 @@ class _MinePageState extends State<MinePage>
   Widget _buildFuntionItem({
     required IconData icon,
     required String title,
+    String? rightText, // 改为rightText表示右侧文本
     required VoidCallback onTap,
     required ColorScheme colorScheme,
   }) {
     return ListTile(
       leading: Icon(icon, size: 22, color: colorScheme.primary),
       title: Text(title),
-      trailing: const Icon(
-        Icons.arrow_forward_ios_rounded,
-        size: 16,
-        color: Colors.grey,
-      ),
+      trailing:
+          rightText != null && rightText.isNotEmpty
+              ? Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Text(rightText, style: TextStyle(fontSize: 14)),
+                  const SizedBox(width: 4),
+                  const Icon(
+                    Icons.arrow_forward_ios_rounded,
+                    size: 16,
+                    color: Colors.grey,
+                  ),
+                ],
+              )
+              : const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 16,
+                color: Colors.grey,
+              ),
       onTap: onTap,
       contentPadding: const EdgeInsets.symmetric(horizontal: 16),
     );
