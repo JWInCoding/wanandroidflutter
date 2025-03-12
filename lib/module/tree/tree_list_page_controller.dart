@@ -14,7 +14,7 @@ class TreeListPageController extends GetxController {
   final hasError = true.obs;
 
   final int cid;
-  final _pageIndex = 1.obs;
+  final _pageIndex = 0.obs;
   final _articleList = <ArticleItemEntity>[].obs;
   final lastLoadedData = <ArticleItemEntity>[].obs; // 新增状态存储上一次加载的数据
 
@@ -44,7 +44,7 @@ class TreeListPageController extends GetxController {
     hasError.value = false;
 
     try {
-      _pageIndex.value = 1;
+      _pageIndex.value = 0;
       _articleList.clear();
       bool success = await _loadRequest();
       if (success) {
@@ -90,10 +90,14 @@ class TreeListPageController extends GetxController {
       queryParams: {"cid": cid},
     );
 
-    if (articleRes.isSuccessful && articleRes.data != null) {
-      _articleList.addAll(articleRes.data!.datas);
-      _articleList.refresh();
-      return true;
+    if (articleRes.isSuccessful) {
+      List<ArticleItemEntity> newItems = articleRes.data?.datas ?? [];
+      if (newItems.isNotEmpty) {
+        _articleList.addAll(newItems);
+        _articleList.refresh(); // 重要: 触发 UI 更新
+        return true; // 返回加载状态
+      }
+      return false; // 没有更多数据
     } else {
       return false;
     }
@@ -124,7 +128,7 @@ class TreeListPageController extends GetxController {
         (element) => element.id == itemEntity.id,
       );
       if (index != -1) {
-        articleList[index] = itemEntity;
+        _articleList[index] = itemEntity;
         _articleList.refresh();
       }
     } else {

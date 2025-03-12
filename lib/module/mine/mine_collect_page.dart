@@ -42,6 +42,7 @@ class _MineCollectPageState extends State<MineCollectPage>
           onLoad: _controller.loadMoreData,
           childBuilder: (context, physics) {
             return ListView.builder(
+              physics: physics,
               itemCount: _controller.articleList.length,
               itemBuilder: (context, index) {
                 // 计算文章列表中的实际索引
