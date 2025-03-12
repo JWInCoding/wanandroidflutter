@@ -60,12 +60,24 @@ class _MineCoinPageState extends State<MineCoinPage>
                 onRefresh: _controller.refreshData,
                 onLoad: _controller.loadMoreData,
                 childBuilder:
-                    (context, physics) => ListView.builder(
+                    (context, physics) => ListView.separated(
                       physics: physics,
                       padding: EdgeInsets.zero,
                       itemCount: _controller.coinList.length,
                       itemBuilder: (context, index) {
                         return _buildItem(context, index);
+                      },
+                      //分割线
+                      separatorBuilder: (context, index) {
+                        return Divider(
+                          height: 1,
+                          thickness: 0.5,
+                          indent: 16,
+                          endIndent: 16,
+                          color: Theme.of(
+                            context,
+                          ).colorScheme.outline.withOpacity(0.6),
+                        );
                       },
                     ),
               );

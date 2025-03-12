@@ -115,41 +115,52 @@ class _MinePageState extends State<MinePage>
   }
 
   ListView _buildListView(ColorScheme colorScheme) {
-    return ListView(
+    final items = [
+      Obx(
+        () => _buildFuntionItem(
+          icon: Icons.grade,
+          title: '我的积分',
+          rightText: Get.find<UserController>().userCoinCount.toString(),
+          onTap: () {
+            if (UserController.to.isLoggedIn.value) {
+              Get.to(() => const MineCoinPage());
+            } else {
+              Get.to(() => const LoginPage());
+            }
+          },
+          colorScheme: colorScheme,
+        ),
+      ),
+      _buildFuntionItem(
+        icon: Icons.favorite_border,
+        title: '我的收藏',
+        onTap: () {
+          Get.to(() => const SettingPage());
+        },
+        colorScheme: colorScheme,
+      ),
+      _buildFuntionItem(
+        icon: Icons.settings_outlined,
+        title: '设置',
+        onTap: () {
+          Get.to(() => const SettingPage());
+        },
+        colorScheme: colorScheme,
+      ),
+    ];
+
+    return ListView.separated(
       physics: const ClampingScrollPhysics(),
-      children: [
-        Obx(
-          () => _buildFuntionItem(
-            icon: Icons.grade,
-            title: '我的积分',
-            rightText: Get.find<UserController>().userCoinCount.toString(),
-            onTap: () {
-              if (UserController.to.isLoggedIn.value) {
-                Get.to(() => const MineCoinPage());
-              } else {
-                Get.to(() => const LoginPage());
-              }
-            },
-            colorScheme: colorScheme,
+      itemCount: items.length,
+      itemBuilder: (context, index) => items[index],
+      separatorBuilder:
+          (context, index) => Divider(
+            height: 1,
+            thickness: 0.5,
+            indent: 16,
+            endIndent: 16,
+            color: colorScheme.outline.withOpacity(0.6),
           ),
-        ),
-        _buildFuntionItem(
-          icon: Icons.favorite_border,
-          title: '我的收藏',
-          onTap: () {
-            Get.to(() => const SettingPage());
-          },
-          colorScheme: colorScheme,
-        ),
-        _buildFuntionItem(
-          icon: Icons.settings_outlined,
-          title: '设置',
-          onTap: () {
-            Get.to(() => const SettingPage());
-          },
-          colorScheme: colorScheme,
-        ),
-      ],
     );
   }
 
