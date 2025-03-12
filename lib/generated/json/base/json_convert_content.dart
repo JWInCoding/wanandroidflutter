@@ -118,6 +118,9 @@ class JsonConvert {
     } else if (type == "DateTime") {
       return DateTime.parse(values) as T;
     } else if (type == "bool") {
+      if (value == null || values == 'null') {
+        return false as T; // 转换为泛型 T
+      }
       if (values == '0' || values == '1') {
         return (values == '1') as T;
       }

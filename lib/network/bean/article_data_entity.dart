@@ -47,7 +47,7 @@ class ArticleItemEntity {
   late String desc;
   late String descMd;
   late String envelopePic;
-  late bool fresh;
+  bool fresh = false;
   late String host;
   late int id;
   late bool isAdminAdd;

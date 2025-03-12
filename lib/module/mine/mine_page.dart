@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
 import 'package:wanandroidflutter/module/mine/login_page.dart';
 import 'package:wanandroidflutter/module/mine/mine_coin_page.dart';
+import 'package:wanandroidflutter/module/mine/mine_collect_page.dart';
 import 'package:wanandroidflutter/module/mine/setting_page.dart';
 import 'package:wanandroidflutter/user.dart';
 
@@ -135,7 +136,11 @@ class _MinePageState extends State<MinePage>
         icon: Icons.favorite_border,
         title: '我的收藏',
         onTap: () {
-          Get.to(() => const SettingPage());
+          if (UserController.to.isLoggedIn.value) {
+            Get.to(() => const MineCollectPage());
+          } else {
+            Get.to(() => const LoginPage());
+          }
         },
         colorScheme: colorScheme,
       ),
