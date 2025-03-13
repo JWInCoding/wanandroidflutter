@@ -21,6 +21,7 @@ class _DetailPageState extends State<DetailPage> {
   final WebViewController _controller = WebViewController();
 
   bool finish = false;
+  int loadProgress = 0; // 添加加载进度变量
 
   @override
   void initState() {
@@ -30,7 +31,12 @@ class _DetailPageState extends State<DetailPage> {
       ..setNavigationDelegate(
         NavigationDelegate(
           onPageStarted: (url) => {},
-          onProgress: (progress) => {},
+          onProgress: (progress) {
+            // 更新加载进度
+            setState(() {
+              loadProgress = progress;
+            });
+          },
           onPageFinished: (content) {
             setState(() {
               finish = true;
@@ -78,7 +84,14 @@ class _DetailPageState extends State<DetailPage> {
                 width: double.infinity,
                 height: double.infinity,
                 alignment: Alignment.center,
-                child: const CircularProgressIndicator(),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const CircularProgressIndicator(),
+                    const SizedBox(height: 16),
+                    Text("加载中... $loadProgress%"), // 显示加载进度百分比
+                  ],
+                ),
               )
               : WebViewWidget(controller: _controller, key: contentKey),
     );

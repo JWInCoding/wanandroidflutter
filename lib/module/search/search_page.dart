@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:mmkv/mmkv.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
+import 'package:wanandroidflutter/module/search/search_result_page.dart';
 import 'package:wanandroidflutter/network/api.dart';
 import 'package:wanandroidflutter/network/bean/AppResponse.dart';
 import 'package:wanandroidflutter/network/bean/hot_keyword_entity.dart';
@@ -90,6 +91,7 @@ class _SearchPageState extends State<SearchPage> with BasePage<SearchPage> {
       histories.insert(0, content);
     });
     // 跳转搜索结果页
+    Get.to(() => SearchResultPage(keyword: content));
   }
 
   _deleteHistory(int index) {
