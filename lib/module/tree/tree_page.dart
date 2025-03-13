@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
+import 'package:wanandroidflutter/module/search/search_page.dart';
 import 'package:wanandroidflutter/module/tree/tree_list_page.dart';
 import 'package:wanandroidflutter/module/tree/tree_page_controller.dart';
 
@@ -109,9 +109,7 @@ class _TreePageState extends State<TreePage>
       title: const Text('体系'),
       actions: <Widget>[
         IconButton(
-          onPressed: () {
-            Fluttertoast.showToast(msg: '搜索功能开发中');
-          },
+          onPressed: () => Get.to(() => SearchPage()),
           icon: Icon(Icons.search, color: appBarColorScheme.foregroundColor),
           tooltip: '搜索',
         ),
