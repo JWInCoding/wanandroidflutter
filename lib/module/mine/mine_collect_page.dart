@@ -29,12 +29,14 @@ class _MineCollectPageState extends State<MineCollectPage>
         elevation: 0,
       ),
       body: Obx(() {
-        if (_controller.isLoading.value && _controller.articleList.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
-        if (_controller.hasError.value && _controller.articleList.isEmpty) {
-          return RetryWidget(onTapRetry: _controller.refreshData);
+        if (_controller.articleList.isEmpty) {
+          if (_controller.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          }
+          if (_controller.hasError.value) {
+            return RetryWidget(onTapRetry: _controller.refreshData);
+          }
+          return EmptyWidget();
         }
         return EasyRefresh.builder(
           controller: _controller.refreshController,

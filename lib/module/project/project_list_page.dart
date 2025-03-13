@@ -48,6 +48,7 @@ class _ProjectListPageState extends State<ProjectListPage>
         if (_controller.hasError.value) {
           return RetryWidget(onTapRetry: _controller.refreshData);
         }
+        return EmptyWidget();
       }
       return EasyRefresh(
         controller: _controller.refreshController,

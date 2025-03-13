@@ -44,9 +44,7 @@ class ProjectListController extends GetxController {
       projectList.clear(); // 清空当前数据
 
       bool success = await _loadRequest();
-      if (!success) {
-        hasError.value = true; // 失败时只标记错误，不恢复数据
-      } else {
+      if (success) {
         lastLoadedData.assignAll(projectList); // 更新上一次加载的数据
       }
     } catch (e) {

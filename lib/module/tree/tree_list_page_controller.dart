@@ -49,8 +49,6 @@ class TreeListPageController extends GetxController {
       bool success = await _loadRequest();
       if (success) {
         lastLoadedData.assignAll(_articleList);
-      } else {
-        hasError.value = true;
       }
     } catch (e) {
       Wanlog.e("刷新数据失败 $e");

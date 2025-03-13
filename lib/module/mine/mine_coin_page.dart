@@ -48,12 +48,14 @@ class _MineCoinPageState extends State<MineCoinPage>
           // 列表区域
           Expanded(
             child: Obx(() {
-              if (_controller.isLoading.value && _controller.coinList.isEmpty) {
-                return const Center(child: CircularProgressIndicator());
-              }
-
-              if (_controller.hasError.value && _controller.coinList.isEmpty) {
-                return RetryWidget(onTapRetry: _controller.refreshData);
+              if (_controller.coinList.isEmpty) {
+                if (_controller.isLoading.value) {
+                  return const Center(child: CircularProgressIndicator());
+                }
+                if (_controller.hasError.value) {
+                  return RetryWidget(onTapRetry: _controller.refreshData);
+                }
+                return EmptyWidget();
               }
               return EasyRefresh.builder(
                 controller: _controller.refreshController,
@@ -103,7 +105,15 @@ class _MineCoinPageState extends State<MineCoinPage>
             children: [
               Text(item.reason, style: textTheme.titleMedium),
               SizedBox(height: 5),
-              Text(_formatTimestamp(item.date), style: textTheme.bodySmall),
+              Text(
+                _formatTimestamp(item.date),
+                style: TextStyle(
+                  color: Theme.of(
+                    context,
+                  ).colorScheme.onSurface.withOpacity(0.7),
+                  fontSize: 12,
+                ),
+              ),
             ],
           ),
           Text(

@@ -119,37 +119,29 @@ class ArticleItemLayout extends StatelessWidget {
               const SizedBox(height: 5),
               Row(
                 children: [
-                  Text(
-                    _getSource(),
-                    // 使用主题的次要文本颜色
-                    style: TextStyle(
-                      color: theme.colorScheme.onSurface.withOpacity(0.7),
+                  Expanded(
+                    // 只在文本上使用 Expanded
+                    child: Text(
+                      _getSource(),
+                      style: TextStyle(
+                        color: theme.colorScheme.onSurface.withOpacity(0.7),
+                        fontSize: 12,
+                      ),
+                      overflow: TextOverflow.ellipsis, // 文本溢出时显示省略号
+                      maxLines: 1, // 限制为单行
                     ),
                   ),
-                  Expanded(
-                    child: Container(
-                      width: 14,
-                      height: 24,
-                      alignment: Alignment.topRight,
-                      child: Builder(
-                        builder: (context) {
-                          if (displayCollectButton == false) {
-                            return Container();
-                          }
-                          return GestureDetector(
-                            onTap: onCollectTap,
-                            child: Icon(
-                              itemEntity.collect
-                                  ? Icons.favorite
-                                  : Icons.favorite_border,
-                              // 使用主题的主色
-                              color: Colors.redAccent,
-                            ),
-                          );
-                        },
+                  const SizedBox(width: 8), // 留出适当间距
+                  if (displayCollectButton) // 使用条件渲染直接简化代码
+                    GestureDetector(
+                      onTap: onCollectTap,
+                      child: Icon(
+                        itemEntity.collect
+                            ? Icons.favorite
+                            : Icons.favorite_border,
+                        color: Colors.redAccent,
                       ),
                     ),
-                  ),
                 ],
               ),
             ],
