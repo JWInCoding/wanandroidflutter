@@ -1,12 +1,12 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
-import 'package:fluttertoast/fluttertoast.dart';
 import 'package:get/get.dart';
 import 'package:wanandroidflutter/base/base_page.dart';
 import 'package:wanandroidflutter/module/article_item_layout.dart';
 import 'package:wanandroidflutter/module/detail_page.dart';
 import 'package:wanandroidflutter/module/home/home_controller.dart';
+import 'package:wanandroidflutter/module/search/search_page.dart';
 import 'package:wanandroidflutter/network/bean/banner_entity.dart';
 import 'package:wanandroidflutter/utils/image_util.dart';
 
@@ -52,7 +52,7 @@ class _HomePageState extends State<HomePage>
         actions: <Widget>[
           IconButton(
             onPressed: () {
-              Fluttertoast.showToast(msg: '搜索功能开发中');
+              Get.to(() => SearchPage());
             },
             icon: Icon(Icons.search, color: appBarColorScheme.foregroundColor),
             tooltip: '搜索',
